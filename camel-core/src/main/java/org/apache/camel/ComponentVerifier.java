@@ -27,56 +27,33 @@ import org.apache.camel.util.ObjectHelper;
  * Defines the interface used to validate component/endpoint parameters.
  */
 public interface ComponentVerifier {
-    String CODE_AUTHENTICATION = "authentication";
-    String CODE_EXCEPTION = "exception";
-    String CODE_INTERNAL = "internal";
-    String CODE_MISSING_OPTION = "missing-option";
-    String CODE_MISSING_OPTION_GROUP = "missing-option-group";
-    String CODE_UNKNOWN_OPTION = "unknown-option";
-    String CODE_ILLEGAL_OPTION = "illegal-option";
-    String CODE_ILLEGAL_OPTION_GROUP_COMBINATION = "illegal-option-group-combination";
-    String CODE_ILLEGAL_OPTION_VALUE = "illegal-option-value";
-    String CODE_INCOMPLETE_OPTION_GROUP = "incomplete-option-group";
-    String CODE_UNSUPPORTED = "unsupported";
-    String CODE_UNSUPPORTED_SCOPE = "unsupported-scope";
-    String ERROR_TYPE_ATTRIBUTE = "error.type";
+
     String ERROR_TYPE_EXCEPTION = "exception";
     String ERROR_TYPE_HTTP = "http";
-    String HTTP_CODE = "http.code";
-    String HTTP_TEXT = "http.text";
-    String HTTP_REDIRECT = "http.redirect";
-    String HTTP_REDIRECT_LOCATION = "http.redirect.location";
-    String EXCEPTION_CLASS = "exception.class";
-    String EXCEPTION_INSTANCE = "exception.instance";
-    String GROUP_NAME = "group.name";
-    String GROUP_OPTIONS = "group.options";
 
     enum Scope {
-        NONE,
         PARAMETERS,
         CONNECTIVITY;
 
-        private static final Scope[] VALUES = values();
-
-        public static Scope fromString(String scope) {
-            for (int i = 0; i < VALUES.length; i++) {
-                if (ObjectHelper.equal(scope, VALUES[i].name(), true)) {
-                    return VALUES[i];
+        public static Scope fromString(String scopeS) {
+            for (Scope scope : values()) {
+                if (ObjectHelper.equal(scopeS, scope.name(), true)) {
+                    return scope;
                 }
             }
 
-            throw new IllegalArgumentException("Unknown scope <" + scope + ">");
+            throw new IllegalArgumentException("Unknown scope <" + scopeS + ">");
         }
     }
 
     /**
      * Represent an error
      */
-    interface Error extends Serializable {
+    interface VerificationError extends Serializable {
         /**
          * @return the error code
          */
-        String getCode();
+        Code getCode();
 
         /**
          * @return the error description (if available)
@@ -84,14 +61,57 @@ public interface ComponentVerifier {
         String getDescription();
 
         /**
-         * @return the parameters in error
+         * @return the input parameter name which caused this error
          */
-        Set<String> getParameters();
+        Set<String> getParameterKeys();
 
         /**
-         * @return a number of key/value pair with additional information related to the validation.
+         * @return a number of key/value pair with additional information related to the verfication.
          */
-        Map<String, Object> getAttributes();
+        Map<Attribute, Object> getDetails();
+
+        // Typed error codes
+        interface Code {
+            String name();
+        }
+
+        /**
+         * Standard set of available code
+         */
+        enum StandardCode implements Code {
+            AUTHENTICATION,
+            EXCEPTION,
+            INTERNAL,
+            MISSING_OPTION,
+            UNKNOWN_OPTION,
+            ILLEGAL_OPTION,
+            ILLEGAL_OPTION_GROUP_COMBINATION,
+            ILLEGAL_OPTION_VALUE,
+            INCOMPLETE_OPTION_GROUP,
+            UNSUPPORTED,
+            UNSUPPORTED_SCOPE,
+            GENERIC
+        }
+
+        /**
+         * Attribute for detailed error messages
+         */
+        interface Attribute {
+            String name();
+        }
+
+        /**
+         * Standard set of available attributes
+         */
+        enum StandardAttribute implements Attribute {
+            TYPE,
+            EXCEPTION_INSTANCE,
+            EXCEPTION_CLASS,
+            HTTP_CODE,
+            HTTP_BODY,
+            GROUP_NAME,
+            GROUP_OPTIONS
+        }
     }
 
     /**
@@ -117,7 +137,7 @@ public interface ComponentVerifier {
         /**
          * @return a list of errors
          */
-        List<Error> getErrors();
+        List<VerificationError> getErrors();
     }
 
     /**

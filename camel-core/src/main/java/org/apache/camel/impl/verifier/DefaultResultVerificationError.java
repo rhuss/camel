@@ -20,14 +20,15 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.camel.ComponentVerifier;
+import org.apache.camel.ComponentVerifier.VerificationError;
 
-public class DefaultResultError implements ComponentVerifier.Error {
-    private final String code;
+public class DefaultResultVerificationError implements VerificationError {
+    private final Code code;
     private final String description;
     private final Set<String> parameters;
-    private final Map<String, Object> attributes;
+    private final Map<Attribute, Object> attributes;
 
-    public DefaultResultError(String code, String description, Set<String> parameters, Map<String, Object> attributes) {
+    public DefaultResultVerificationError(Code code, String description, Set<String> parameters, Map<Attribute, Object> attributes) {
         this.code = code;
         this.description = description;
         this.parameters = parameters;
@@ -35,7 +36,7 @@ public class DefaultResultError implements ComponentVerifier.Error {
     }
 
     @Override
-    public String getCode() {
+    public Code getCode() {
         return code;
     }
 
@@ -45,12 +46,12 @@ public class DefaultResultError implements ComponentVerifier.Error {
     }
 
     @Override
-    public Set<String> getParameters() {
+    public Set<String> getParameterKeys() {
         return parameters;
     }
 
     @Override
-    public Map<String, Object> getAttributes() {
+    public Map<Attribute, Object> getDetails() {
         return attributes;
     }
 
