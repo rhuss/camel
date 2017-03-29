@@ -129,15 +129,13 @@ public final class ResultErrorBuilder {
 
     public static ResultErrorBuilder withHttpCode(int code) {
         return withCode(convertHttpCodeToErrorCode(code))
-            .detail(VerificationError.StandardAttribute.TYPE, ComponentVerifier.ERROR_TYPE_HTTP)
-            .detail(VerificationError.StandardAttribute.HTTP_CODE, code);
+            .detail(VerificationError.HttpAttribute.HTTP_CODE, code);
     }
 
     public static ResultErrorBuilder withHttpCodeAndText(int code, String text) {
         return withCodeAndDescription(convertHttpCodeToErrorCode(code), text)
-            .detail(VerificationError.StandardAttribute.TYPE, ComponentVerifier.ERROR_TYPE_HTTP)
-            .detail(VerificationError.StandardAttribute.HTTP_CODE, code)
-            .detail(VerificationError.StandardAttribute.HTTP_BODY, text);
+            .detail(VerificationError.HttpAttribute.HTTP_CODE, code)
+            .detail(VerificationError.HttpAttribute.HTTP_TEXT, text);
     }
 
     private static VerificationError.StandardCode convertHttpCodeToErrorCode(int code) {
@@ -158,28 +156,27 @@ public final class ResultErrorBuilder {
         return new ResultErrorBuilder()
             .code(VerificationError.StandardCode.EXCEPTION)
             .description(exception.getMessage())
-            .detail(VerificationError.StandardAttribute.TYPE, ComponentVerifier.ERROR_TYPE_EXCEPTION)
-            .detail(VerificationError.StandardAttribute.EXCEPTION_INSTANCE, exception)
-            .detail(VerificationError.StandardAttribute.EXCEPTION_CLASS, exception.getClass().getName());
+            .detail(VerificationError.ExceptionAttribute.EXCEPTION_INSTANCE, exception)
+            .detail(VerificationError.ExceptionAttribute.EXCEPTION_CLASS, exception.getClass().getName());
     }
 
     public static ResultErrorBuilder withMissingOption(String optionName) {
         return new ResultErrorBuilder()
-            .code(VerificationError.StandardCode.MISSING_OPTION)
+            .code(VerificationError.StandardCode.MISSING_PARAMETER)
             .description(optionName + " should be set")
             .parameterKey(optionName);
     }
 
     public static ResultErrorBuilder withUnknownOption(String optionName) {
         return new ResultErrorBuilder()
-            .code(VerificationError.StandardCode.UNKNOWN_OPTION)
+            .code(VerificationError.StandardCode.UNKNOWN_PARAMETER)
             .description("Unknown option " + optionName)
             .parameterKey(optionName);
     }
 
     public static ResultErrorBuilder withIllegalOption(String optionName) {
         return new ResultErrorBuilder()
-            .code(VerificationError.StandardCode.ILLEGAL_OPTION)
+            .code(VerificationError.StandardCode.ILLEGAL_PARAMETER)
             .description("Illegal option " + optionName)
             .parameterKey(optionName);
     }
@@ -187,7 +184,7 @@ public final class ResultErrorBuilder {
     public static ResultErrorBuilder withIllegalOption(String optionName, String optionValue) {
         return ObjectHelper.isNotEmpty(optionValue)
             ? new ResultErrorBuilder()
-                .code(VerificationError.StandardCode.ILLEGAL_OPTION_VALUE)
+                .code(VerificationError.StandardCode.ILLEGAL_PARAMETER_VALUE)
                 .description(optionName + " has wrong value (" + optionValue + ")")
                 .parameterKey(optionName)
             : withIllegalOption(optionName);

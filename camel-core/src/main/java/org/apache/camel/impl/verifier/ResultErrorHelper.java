@@ -26,7 +26,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import org.apache.camel.ComponentVerifier;
 import org.apache.camel.ComponentVerifier.VerificationError;
 import org.apache.camel.util.ObjectHelper;
 
@@ -69,9 +68,9 @@ public final class ResultErrorHelper {
                 return Collections.emptyList();
             } else {
                 ResultErrorBuilder builder = new ResultErrorBuilder()
-                    .code(VerificationError.StandardCode.INCOMPLETE_OPTION_GROUP)
-                    .detail(VerificationError.StandardAttribute.GROUP_NAME, group.getName())
-                    .detail(VerificationError.StandardAttribute.GROUP_OPTIONS, String.join(",", group.getOptions()));
+                    .code(VerificationError.StandardCode.INCOMPLETE_PARAMETER_GROUP)
+                    .detail(VerificationError.GroupAttribute.GROUP_NAME, group.getName())
+                    .detail(VerificationError.GroupAttribute.GROUP_OPTIONS, String.join(",", group.getOptions()));
 
                 for (String option : group.getOptions()) {
                     if (!parameters.containsKey(option)) {

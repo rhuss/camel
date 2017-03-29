@@ -60,7 +60,7 @@ public class DefaultComponentVerifierTest extends ContextTestSupport {
         Assert.assertEquals(ComponentVerifier.Result.Status.ERROR, result.getStatus());
 
         Assert.assertEquals(1, result.getErrors().size());
-        Assert.assertEquals(VerificationError.StandardCode.MISSING_OPTION, result.getErrors().get(0).getCode());
+        Assert.assertEquals(VerificationError.StandardCode.MISSING_PARAMETER, result.getErrors().get(0).getCode());
         Assert.assertTrue(result.getErrors().get(0).getParameterKeys().contains("timerName"));
     }
 
@@ -74,7 +74,7 @@ public class DefaultComponentVerifierTest extends ContextTestSupport {
         Assert.assertEquals(ComponentVerifier.Result.Status.ERROR, result.getStatus());
 
         Assert.assertEquals(1, result.getErrors().size());
-        Assert.assertEquals(VerificationError.StandardCode.ILLEGAL_OPTION_VALUE, result.getErrors().get(0).getCode());
+        Assert.assertEquals(VerificationError.StandardCode.ILLEGAL_PARAMETER_VALUE, result.getErrors().get(0).getCode());
         Assert.assertEquals("fixedRate has wrong value (wrong)", result.getErrors().get(0).getDescription());
         Assert.assertTrue(result.getErrors().get(0).getParameterKeys().contains("fixedRate"));
     }
