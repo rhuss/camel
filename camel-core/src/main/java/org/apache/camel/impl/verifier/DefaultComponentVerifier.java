@@ -123,7 +123,7 @@ public class DefaultComponentVerifier implements ComponentVerifier {
             stream(result.getInvalidEnum())
                 .map(entry ->
                     ResultErrorBuilder.withIllegalOption(entry.getKey(), entry.getValue())
-                        .detail(ResultErrorBuilder.errorAttribute("enum.values"), result.getEnumChoices(entry.getKey()))
+                        .detail(ResultErrorBuilder.attribute("enum.values"), result.getEnumChoices(entry.getKey()))
                         .build())
                 .forEach(builder::error);
         }

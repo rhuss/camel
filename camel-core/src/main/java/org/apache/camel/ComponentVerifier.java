@@ -35,14 +35,15 @@ public interface ComponentVerifier {
         PARAMETERS,
         CONNECTIVITY;
 
-        public static Scope fromString(String scopeS) {
-            for (Scope scope : values()) {
-                if (ObjectHelper.equal(scopeS, scope.name(), true)) {
-                    return scope;
+        private static final Scope[] VALUES = values();
+
+        public static Scope fromString(String scope) {
+            for (Scope value : VALUES) {
+                if (ObjectHelper.equal(scope, value.name(), true)) {
+                    return value;
                 }
             }
-
-            throw new IllegalArgumentException("Unknown scope <" + scopeS + ">");
+            throw new IllegalArgumentException("Unknown scope <" + scope + ">");
         }
     }
 

@@ -178,11 +178,11 @@ public final class ResultErrorBuilder {
     // Create error keys
     // **********************************
 
-    public static ComponentVerifier.VerificationError.Code errorCode(String code) {
+    public static ComponentVerifier.VerificationError.Code code(String code) {
         return new ErrorCode(code);
     }
 
-    public static ComponentVerifier.VerificationError.Attribute errorAttribute(String attribute) {
+    public static ComponentVerifier.VerificationError.Attribute attribute(String attribute) {
         return new ErrorAttribute(attribute);
     }
 
