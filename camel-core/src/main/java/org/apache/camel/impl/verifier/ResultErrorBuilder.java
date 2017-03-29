@@ -47,6 +47,11 @@ public final class ResultErrorBuilder {
         return this;
     }
 
+    public ResultErrorBuilder code(String code) {
+        code(asCode(code));
+        return this;
+    }
+
     public ResultErrorBuilder description(String description) {
         this.description = description;
         return this;
@@ -71,6 +76,11 @@ public final class ResultErrorBuilder {
         return this;
     }
 
+    public ResultErrorBuilder detail(String key, Object value) {
+        detail(asAttribute(key), value);
+        return this;
+    }
+
     public ResultErrorBuilder detail(VerificationError.Attribute key, Object value) {
         if (value != null) {
             if (this.attributes == null) {
@@ -79,6 +89,11 @@ public final class ResultErrorBuilder {
 
             this.attributes.put(key, value);
         }
+        return this;
+    }
+
+    public <T> ResultErrorBuilder detail(String key, Supplier<Optional<T>> supplier) {
+        detail(asAttribute(key), supplier);
         return this;
     }
 
@@ -105,6 +120,10 @@ public final class ResultErrorBuilder {
     // **********************************
 
     public static ResultErrorBuilder withCode(VerificationError.Code code) {
+        return new ResultErrorBuilder().code(code);
+    }
+
+    public static ResultErrorBuilder withCode(String code) {
         return new ResultErrorBuilder().code(code);
     }
 
@@ -178,11 +197,11 @@ public final class ResultErrorBuilder {
     // Create error keys
     // **********************************
 
-    public static ComponentVerifier.VerificationError.Code code(String code) {
+    public static ComponentVerifier.VerificationError.Code asCode(String code) {
         return new ErrorCode(code);
     }
 
-    public static ComponentVerifier.VerificationError.Attribute attribute(String attribute) {
+    public static ComponentVerifier.VerificationError.Attribute asAttribute(String attribute) {
         return new ErrorAttribute(attribute);
     }
 
